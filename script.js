@@ -1,174 +1,275 @@
-```javascript
 /* =========================================
    SnakeRush
-   Game Logic
+   Complete Game Script
 ========================================= */
-
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-const dashboard = document.getElementById("dashboard");
-const gameScreen = document.getElementById("gameScreen");
-const statsScreen = document.getElementById("statsScreen");
-const settingsScreen = document.getElementById("settingsScreen");
-const howToPlayScreen = document.getElementById("howToPlayScreen");
-
-const playBtn = document.getElementById("playBtn");
-const statsBtn = document.getElementById("statsBtn");
-const settingsBtn = document.getElementById("settingsBtn");
-const howToPlayBtn = document.getElementById("howToPlayBtn");
-
-const backFromStats = document.getElementById("backFromStats");
-const backFromSettings = document.getElementById("backFromSettings");
-const backFromHowToPlay = document.getElementById("backFromHowToPlay");
-
-const homeFromGame = document.getElementById("homeFromGame");
-const pauseBtn = document.getElementById("pauseBtn");
-const startRoundBtn = document.getElementById("startRoundBtn");
-
-const gameMessage = document.getElementById("gameMessage");
-
-const scoreElement = document.getElementById("score");
-const gameHighScoreElement = document.getElementById("gameHighScore");
-
-const dashboardHighScore = document.getElementById("dashboardHighScore");
-const statsBestScore = document.getElementById("statsBestScore");
-const statsFood = document.getElementById("statsFood");
-const statsGames = document.getElementById("statsGames");
-const statsLongest = document.getElementById("statsLongest");
-
-const foodCollectedElement = document.getElementById("foodCollected");
-const gamesPlayedElement = document.getElementById("gamesPlayed");
-const longestSnakeElement = document.getElementById("longestSnake");
-
-const soundToggle = document.getElementById("soundToggle");
-const vibrationToggle = document.getElementById("vibrationToggle");
 
 
 /* =========================================
-   STORAGE
+   ELEMENTS
 ========================================= */
 
-const STORAGE_KEY = "snakeRushStats";
+const dashboard =
+    document.getElementById("dashboard");
 
-let savedStats = JSON.parse(
-    localStorage.getItem(STORAGE_KEY)
-) || {
-    highScore: 0,
-    foodCollected: 0,
-    gamesPlayed: 0,
-    longestSnake: 3
-};
+const gameScreen =
+    document.getElementById("gameScreen");
+
+const statsScreen =
+    document.getElementById("statsScreen");
+
+const howScreen =
+    document.getElementById("howScreen");
+
+const settingsScreen =
+    document.getElementById("settingsScreen");
+
+
+const playButton =
+    document.getElementById("playButton");
+
+const statsButton =
+    document.getElementById("statsButton");
+
+const howButton =
+    document.getElementById("howButton");
+
+const settingsButton =
+    document.getElementById("settingsButton");
+
+
+const statsBack =
+    document.getElementById("statsBack");
+
+const howBack =
+    document.getElementById("howBack");
+
+const settingsBack =
+    document.getElementById("settingsBack");
+
+
+const homeButton =
+    document.getElementById("homeButton");
+
+const pauseButton =
+    document.getElementById("pauseButton");
+
+
+const canvas =
+    document.getElementById("gameCanvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+
+const gameArea =
+    document.getElementById("gameArea");
+
+
+const scoreElement =
+    document.getElementById("score");
+
+const gameHighScore =
+    document.getElementById("gameHighScore");
+
+
+const dashboardHighScore =
+    document.getElementById(
+        "dashboardHighScore"
+    );
+
+const dashboardFood =
+    document.getElementById(
+        "dashboardFood"
+    );
+
+const dashboardGames =
+    document.getElementById(
+        "dashboardGames"
+    );
+
+
+const statsHighScore =
+    document.getElementById(
+        "statsHighScore"
+    );
+
+const statsFood =
+    document.getElementById(
+        "statsFood"
+    );
+
+const statsGames =
+    document.getElementById(
+        "statsGames"
+    );
+
+const statsLongest =
+    document.getElementById(
+        "statsLongest"
+    );
+
+
+const gameOverlay =
+    document.getElementById(
+        "gameOverlay"
+    );
+
+const overlayIcon =
+    document.getElementById(
+        "overlayIcon"
+    );
+
+const overlayTitle =
+    document.getElementById(
+        "overlayTitle"
+    );
+
+const overlayText =
+    document.getElementById(
+        "overlayText"
+    );
+
+const overlayButton =
+    document.getElementById(
+        "overlayButton"
+    );
+
+
+const soundToggle =
+    document.getElementById(
+        "soundToggle"
+    );
+
+const vibrationToggle =
+    document.getElementById(
+        "vibrationToggle"
+    );
 
 
 /* =========================================
-   GAME VARIABLES
+   GAME SETTINGS
 ========================================= */
+
+const GRID = 20;
+
+let cellSize = 20;
 
 let snake = [];
-let food = {};
+
+let food = {
+    x: 5,
+    y: 5
+};
+
 
 let direction = {
     x: 1,
     y: 0
 };
 
+
 let nextDirection = {
     x: 1,
     y: 0
 };
 
+
 let score = 0;
 
 let gameRunning = false;
+
 let gamePaused = false;
 
-let gameLoop = null;
-
-let gridSize = 20;
-
-let cellSize = 20;
-
-let lastTouchX = 0;
-let lastTouchY = 0;
+let gameTimer = null;
 
 
 /* =========================================
-   SOUND
+   SAVED DATA
 ========================================= */
 
-let audioContext = null;
+let gameStats =
+    JSON.parse(
+        localStorage.getItem(
+            "snakeRushStats"
+        )
+    ) || {
 
-function playBeep(frequency = 500, duration = 0.06) {
+        highScore: 0,
 
-    if (!soundToggle || !soundToggle.checked) {
-        return;
-    }
+        foodCollected: 0,
 
-    try {
+        gamesPlayed: 0,
 
-        if (!audioContext) {
-            audioContext = new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
-        }
+        longestSnake: 3
+    };
 
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
 
-        oscillator.frequency.value = frequency;
-        oscillator.type = "sine";
+/* =========================================
+   SAVE DATA
+========================================= */
 
-        gain.gain.setValueAtTime(
-            0.06,
-            audioContext.currentTime
-        );
+function saveStats() {
 
-        gain.gain.exponentialRampToValueAtTime(
-            0.001,
-            audioContext.currentTime + duration
-        );
+    localStorage.setItem(
+        "snakeRushStats",
+        JSON.stringify(gameStats)
+    );
 
-        oscillator.connect(gain);
-        gain.connect(audioContext.destination);
-
-        oscillator.start();
-        oscillator.stop(
-            audioContext.currentTime + duration
-        );
-
-    } catch (error) {
-        // Audio is optional.
-    }
 }
 
 
 /* =========================================
-   VIBRATION
+   UPDATE ALL STATS
 ========================================= */
 
-function vibrate(pattern = 30) {
+function updateStatsUI() {
 
-    if (
-        vibrationToggle &&
-        vibrationToggle.checked &&
-        "vibrate" in navigator
-    ) {
-        navigator.vibrate(pattern);
-    }
+    dashboardHighScore.textContent =
+        gameStats.highScore;
+
+    dashboardFood.textContent =
+        gameStats.foodCollected;
+
+    dashboardGames.textContent =
+        gameStats.gamesPlayed;
+
+
+    statsHighScore.textContent =
+        gameStats.highScore;
+
+    statsFood.textContent =
+        gameStats.foodCollected;
+
+    statsGames.textContent =
+        gameStats.gamesPlayed;
+
+    statsLongest.textContent =
+        gameStats.longestSnake;
+
+
+    gameHighScore.textContent =
+        gameStats.highScore;
 }
 
 
 /* =========================================
-   SCREEN MANAGEMENT
+   SCREEN NAVIGATION
 ========================================= */
 
 function showScreen(screen) {
 
-    document.querySelectorAll(".screen").forEach(
-        item => item.classList.remove("active")
-    );
+    document
+        .querySelectorAll(".screen")
+        .forEach(
+            screenItem => {
+
+                screenItem.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
 
     screen.classList.add("active");
 
@@ -180,123 +281,209 @@ function showScreen(screen) {
 
 
 /* =========================================
-   DASHBOARD DATA
+   SOUND
 ========================================= */
 
-function updateDashboard() {
-
-    dashboardHighScore.textContent = savedStats.highScore;
-    foodCollectedElement.textContent = savedStats.foodCollected;
-    gamesPlayedElement.textContent = savedStats.gamesPlayed;
-    longestSnakeElement.textContent = savedStats.longestSnake;
-
-    statsBestScore.textContent = savedStats.highScore;
-    statsFood.textContent = savedStats.foodCollected;
-    statsGames.textContent = savedStats.gamesPlayed;
-    statsLongest.textContent = savedStats.longestSnake;
-
-    gameHighScoreElement.textContent = savedStats.highScore;
-}
+let audioContext = null;
 
 
-function saveStats() {
+function beep(
+    frequency = 500,
+    duration = 0.07
+) {
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(savedStats)
-    );
+    if (
+        !soundToggle.checked
+    ) {
+        return;
+    }
 
-    updateDashboard();
+
+    try {
+
+        if (!audioContext) {
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+        }
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.frequency.value =
+            frequency;
+
+        oscillator.type =
+            "sine";
+
+
+        gain.gain.setValueAtTime(
+            0.05,
+            audioContext.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audioContext.currentTime +
+                duration
+        );
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime +
+                duration
+        );
+
+    } catch (error) {
+
+        // Sound is optional.
+    }
 }
 
 
 /* =========================================
-   CANVAS
+   VIBRATION
+========================================= */
+
+function vibrate(pattern) {
+
+    if (
+        vibrationToggle.checked &&
+        "vibrate" in navigator
+    ) {
+
+        navigator.vibrate(pattern);
+    }
+}
+
+
+/* =========================================
+   CANVAS RESIZE
 ========================================= */
 
 function resizeCanvas() {
 
-    const rect = document
-        .getElementById("gameArea")
-        .getBoundingClientRect();
+    const size =
+        Math.floor(
+            gameArea.clientWidth
+        );
 
-    const size = Math.floor(
-        Math.min(rect.width, rect.height)
-    );
 
-    const pixelRatio = Math.min(
-        window.devicePixelRatio || 1,
-        2
-    );
+    const ratio =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
 
-    canvas.width = size * pixelRatio;
-    canvas.height = size * pixelRatio;
 
-    canvas.style.width = size + "px";
-    canvas.style.height = size + "px";
+    canvas.width =
+        size * ratio;
+
+    canvas.height =
+        size * ratio;
+
+
+    canvas.style.width =
+        size + "px";
+
+    canvas.style.height =
+        size + "px";
+
 
     ctx.setTransform(
-        pixelRatio,
+        ratio,
         0,
         0,
-        pixelRatio,
+        ratio,
         0,
         0
     );
 
-    cellSize = size / gridSize;
 
-    drawGame();
+    cellSize =
+        size / GRID;
+
+
+    draw();
 }
 
 
 /* =========================================
-   INITIAL SNAKE
+   CREATE SNAKE
 ========================================= */
 
 function createSnake() {
 
     snake = [
+
         {
             x: 10,
             y: 10
         },
+
         {
             x: 9,
             y: 10
         },
+
         {
             x: 8,
             y: 10
         }
+
     ];
 }
 
 
 /* =========================================
-   FOOD
+   CREATE FOOD
 ========================================= */
 
 function createFood() {
 
-    let validPosition = false;
+    let positionOK = false;
 
-    while (!validPosition) {
+
+    while (!positionOK) {
 
         food = {
-            x: Math.floor(
-                Math.random() * gridSize
-            ),
-            y: Math.floor(
-                Math.random() * gridSize
-            )
+
+            x:
+                Math.floor(
+                    Math.random() * GRID
+                ),
+
+            y:
+                Math.floor(
+                    Math.random() * GRID
+                )
         };
 
-        validPosition = !snake.some(
-            segment =>
-                segment.x === food.x &&
-                segment.y === food.y
-        );
+
+        positionOK =
+            !snake.some(
+                part =>
+                    part.x === food.x &&
+                    part.y === food.y
+            );
     }
 }
 
@@ -307,139 +494,190 @@ function createFood() {
 
 function startGame() {
 
-    clearInterval(gameLoop);
+    clearInterval(gameTimer);
+
 
     score = 0;
+
+    scoreElement.textContent =
+        "0";
+
 
     direction = {
         x: 1,
         y: 0
     };
+
 
     nextDirection = {
         x: 1,
         y: 0
     };
 
+
     createSnake();
+
     createFood();
 
-    scoreElement.textContent = score;
 
     gameRunning = true;
+
     gamePaused = false;
 
-    pauseBtn.textContent = "Ⅱ";
 
-    gameMessage.style.display = "none";
+    pauseButton.textContent =
+        "⏸";
+
+
+    overlayButton.textContent =
+        "START GAME";
+
+
+    gameOverlay.style.display =
+        "none";
+
 
     resizeCanvas();
 
-    /*
-        110ms gives a smooth classic Snake speed.
-    */
 
-    gameLoop = setInterval(
-        updateGame,
-        110
-    );
+    gameTimer =
+        setInterval(
+            updateGame,
+            115
+        );
 
-    drawGame();
+
+    draw();
 }
 
 
 /* =========================================
-   GAME UPDATE
+   UPDATE GAME
 ========================================= */
 
 function updateGame() {
 
-    if (!gameRunning || gamePaused) {
+    if (
+        !gameRunning ||
+        gamePaused
+    ) {
         return;
     }
+
 
     direction = {
         ...nextDirection
     };
 
+
     const head = {
-        x: snake[0].x + direction.x,
-        y: snake[0].y + direction.y
+
+        x:
+            snake[0].x +
+            direction.x,
+
+        y:
+            snake[0].y +
+            direction.y
     };
 
 
-    /* Wall Collision */
+    /* WALL */
 
     if (
+
         head.x < 0 ||
-        head.x >= gridSize ||
+
+        head.x >= GRID ||
+
         head.y < 0 ||
-        head.y >= gridSize
+
+        head.y >= GRID
+
     ) {
 
-        endGame();
+        gameOver();
+
         return;
     }
 
 
-    /* Self Collision */
+    /* BODY */
 
-    const hitsBody = snake.some(
-        (segment, index) => {
+    const bodyHit =
+        snake.some(
+            (part, index) => {
 
-            /*
-                The last segment will move away
-                when the snake does not eat food.
-            */
+                if (
+                    index ===
+                    snake.length - 1
+                ) {
 
-            if (index === snake.length - 1) {
-                return false;
+                    return false;
+                }
+
+
+                return (
+
+                    part.x === head.x &&
+
+                    part.y === head.y
+
+                );
             }
+        );
 
-            return (
-                segment.x === head.x &&
-                segment.y === head.y
-            );
-        }
-    );
 
-    if (hitsBody) {
+    if (bodyHit) {
 
-        endGame();
+        gameOver();
+
         return;
     }
 
 
-    /* Add New Head */
+    /* MOVE */
 
     snake.unshift(head);
 
 
-    /* Food Collision */
+    /* FOOD */
 
     if (
+
         head.x === food.x &&
+
         head.y === food.y
+
     ) {
 
         score += 10;
 
-        savedStats.foodCollected++;
+
+        scoreElement.textContent =
+            score;
+
+
+        gameStats.foodCollected++;
+
 
         if (
             snake.length >
-            savedStats.longestSnake
+            gameStats.longestSnake
         ) {
-            savedStats.longestSnake =
+
+            gameStats.longestSnake =
                 snake.length;
         }
 
-        scoreElement.textContent = score;
 
         createFood();
 
-        playBeep(720, 0.07);
+
+        beep(720, 0.08);
+
         vibrate(25);
+
 
     } else {
 
@@ -447,392 +685,7 @@ function updateGame() {
     }
 
 
-    drawGame();
-}
-
-
-/* =========================================
-   DRAW GAME
-========================================= */
-
-function drawGame() {
-
-    const width =
-        canvas.width /
-        (window.devicePixelRatio || 1);
-
-    const height =
-        canvas.height /
-        (window.devicePixelRatio || 1);
-
-
-    /* Background */
-
-    ctx.clearRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    /* Subtle Grid */
-
-    ctx.strokeStyle =
-        "rgba(255,255,255,0.025)";
-
-    ctx.lineWidth = 1;
-
-    for (let i = 0; i <= gridSize; i++) {
-
-        const position =
-            i * cellSize;
-
-        ctx.beginPath();
-        ctx.moveTo(position, 0);
-        ctx.lineTo(position, height);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(0, position);
-        ctx.lineTo(width, position);
-        ctx.stroke();
-    }
-
-
-    /* Food */
-
-    drawFood();
-
-
-    /* Snake */
-
-    snake.forEach(
-        (segment, index) => {
-
-            const x =
-                segment.x * cellSize;
-
-            const y =
-                segment.y * cellSize;
-
-            const padding =
-                cellSize * 0.08;
-
-            const size =
-                cellSize - padding * 2;
-
-            const radius =
-                cellSize * 0.22;
-
-            ctx.beginPath();
-
-            roundRect(
-                ctx,
-                x + padding,
-                y + padding,
-                size,
-                size,
-                radius
-            );
-
-            if (index === 0) {
-
-                ctx.fillStyle =
-                    "#4ade80";
-
-                ctx.shadowColor =
-                    "rgba(74,222,128,0.55)";
-
-                ctx.shadowBlur = 10;
-
-            } else {
-
-                ctx.fillStyle =
-                    "#22c55e";
-
-                ctx.shadowColor =
-                    "rgba(34,197,94,0.20)";
-
-                ctx.shadowBlur = 5;
-            }
-
-            ctx.fill();
-
-            ctx.shadowBlur = 0;
-
-
-            /* Snake Eyes */
-
-            if (index === 0) {
-
-                drawSnakeEyes(
-                    x,
-                    y
-                );
-            }
-        }
-    );
-}
-
-
-/* =========================================
-   FOOD DRAW
-========================================= */
-
-function drawFood() {
-
-    const centerX =
-        food.x * cellSize +
-        cellSize / 2;
-
-    const centerY =
-        food.y * cellSize +
-        cellSize / 2;
-
-    const radius =
-        cellSize * 0.31;
-
-
-    /* Glow */
-
-    ctx.beginPath();
-
-    ctx.arc(
-        centerX,
-        centerY,
-        radius + 3,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle =
-        "rgba(248,113,113,0.12)";
-
-    ctx.fill();
-
-
-    /* Apple */
-
-    ctx.beginPath();
-
-    ctx.arc(
-        centerX,
-        centerY + 1,
-        radius,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle =
-        "#ef4444";
-
-    ctx.shadowColor =
-        "rgba(239,68,68,0.50)";
-
-    ctx.shadowBlur = 9;
-
-    ctx.fill();
-
-    ctx.shadowBlur = 0;
-
-
-    /* Leaf */
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        centerX + 4,
-        centerY - radius - 1,
-        4,
-        2,
-        -0.4,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle =
-        "#4ade80";
-
-    ctx.fill();
-
-
-    /* Small highlight */
-
-    ctx.beginPath();
-
-    ctx.arc(
-        centerX - radius * 0.3,
-        centerY - radius * 0.3,
-        radius * 0.18,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle =
-        "rgba(255,255,255,0.65)";
-
-    ctx.fill();
-}
-
-
-/* =========================================
-   SNAKE EYES
-========================================= */
-
-function drawSnakeEyes(x, y) {
-
-    const headSize = cellSize;
-
-    let eye1X;
-    let eye1Y;
-    let eye2X;
-    let eye2Y;
-
-    const eyeOffset =
-        headSize * 0.27;
-
-    const eyeSize =
-        Math.max(1.8, headSize * 0.075);
-
-
-    if (direction.x === 1) {
-
-        eye1X =
-            x + headSize * 0.68;
-
-        eye2X =
-            x + headSize * 0.68;
-
-        eye1Y =
-            y + headSize * 0.30;
-
-        eye2Y =
-            y + headSize * 0.70;
-
-    } else if (direction.x === -1) {
-
-        eye1X =
-            x + headSize * 0.32;
-
-        eye2X =
-            x + headSize * 0.32;
-
-        eye1Y =
-            y + headSize * 0.30;
-
-        eye2Y =
-            y + headSize * 0.70;
-
-    } else if (direction.y === -1) {
-
-        eye1X =
-            x + headSize * 0.30;
-
-        eye2X =
-            x + headSize * 0.70;
-
-        eye1Y =
-            y + headSize * 0.32;
-
-        eye2Y =
-            y + headSize * 0.32;
-
-    } else {
-
-        eye1X =
-            x + headSize * 0.30;
-
-        eye2X =
-            x + headSize * 0.70;
-
-        eye1Y =
-            y + headSize * 0.68;
-
-        eye2Y =
-            y + headSize * 0.68;
-    }
-
-
-    ctx.fillStyle = "#052e16";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        eye1X,
-        eye1Y,
-        eyeSize,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    ctx.beginPath();
-
-    ctx.arc(
-        eye2X,
-        eye2Y,
-        eyeSize,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-}
-
-
-/* =========================================
-   ROUNDED RECTANGLE
-========================================= */
-
-function roundRect(
-    context,
-    x,
-    y,
-    width,
-    height,
-    radius
-) {
-
-    context.moveTo(
-        x + radius,
-        y
-    );
-
-    context.arcTo(
-        x + width,
-        y,
-        x + width,
-        y + height,
-        radius
-    );
-
-    context.arcTo(
-        x + width,
-        y + height,
-        x,
-        y + height,
-        radius
-    );
-
-    context.arcTo(
-        x,
-        y + height,
-        x,
-        y,
-        radius
-    );
-
-    context.arcTo(
-        x,
-        y,
-        x + width,
-        y,
-        radius
-    );
-
-    context.closePath();
+    draw();
 }
 
 
@@ -840,50 +693,69 @@ function roundRect(
    GAME OVER
 ========================================= */
 
-function endGame() {
+function gameOver() {
 
-    clearInterval(gameLoop);
+    clearInterval(gameTimer);
+
 
     gameRunning = false;
+
     gamePaused = false;
 
-    savedStats.gamesPlayed++;
 
-    if (score > savedStats.highScore) {
-        savedStats.highScore = score;
+    gameStats.gamesPlayed++;
+
+
+    if (
+        score >
+        gameStats.highScore
+    ) {
+
+        gameStats.highScore =
+            score;
     }
+
 
     saveStats();
 
-    gameHighScoreElement.textContent =
-        savedStats.highScore;
+    updateStatsUI();
 
-    playBeep(180, 0.15);
-    vibrate([60, 40, 60]);
 
-    gameMessage.innerHTML = `
-        <h2>💀 Game Over</h2>
-        <p>Your Score: <strong>${score}</strong></p>
-        <p>Best Score: <strong>${savedStats.highScore}</strong></p>
+    beep(180, 0.18);
 
-        <button id="restartRoundBtn">
-            PLAY AGAIN
-        </button>
-    `;
+    vibrate([
+        60,
+        40,
+        60
+    ]);
 
-    gameMessage.style.display = "flex";
 
-    document
-        .getElementById("restartRoundBtn")
-        .addEventListener(
-            "click",
-            startGame
-        );
+    overlayIcon.textContent =
+        "💥";
+
+
+    overlayTitle.textContent =
+        "Game Over!";
+
+
+    overlayText.textContent =
+        "Score: " +
+        score +
+        "  •  Best: " +
+        gameStats.highScore;
+
+
+    overlayButton.textContent =
+        "PLAY AGAIN";
+
+
+    gameOverlay.style.display =
+        "flex";
 }
 
 
 /* =========================================
-   PAUSE
+   PAUSE / RESUME
 ========================================= */
 
 function togglePause() {
@@ -892,35 +764,45 @@ function togglePause() {
         return;
     }
 
-    gamePaused = !gamePaused;
+
+    gamePaused =
+        !gamePaused;
+
 
     if (gamePaused) {
 
-        pauseBtn.textContent = "▶";
+        pauseButton.textContent =
+            "▶";
 
-        gameMessage.innerHTML = `
-            <h2>⏸️ Paused</h2>
-            <p>Take a break.</p>
 
-            <button id="resumeBtn">
-                RESUME
-            </button>
-        `;
+        overlayIcon.textContent =
+            "⏸️";
 
-        gameMessage.style.display = "flex";
 
-        document
-            .getElementById("resumeBtn")
-            .addEventListener(
-                "click",
-                togglePause
-            );
+        overlayTitle.textContent =
+            "Game Paused";
+
+
+        overlayText.textContent =
+            "Press resume when you're ready.";
+
+
+        overlayButton.textContent =
+            "RESUME";
+
+
+        gameOverlay.style.display =
+            "flex";
+
 
     } else {
 
-        pauseBtn.textContent = "Ⅱ";
+        pauseButton.textContent =
+            "⏸";
 
-        gameMessage.style.display = "none";
+
+        gameOverlay.style.display =
+            "none";
     }
 }
 
@@ -931,56 +813,16 @@ function togglePause() {
 
 document.addEventListener(
     "keydown",
-    event => {
+    function(event) {
 
         const key =
             event.key.toLowerCase();
 
 
-        const controls = {
-            arrowup: {
-                x: 0,
-                y: -1
-            },
-
-            w: {
-                x: 0,
-                y: -1
-            },
-
-            arrowdown: {
-                x: 0,
-                y: 1
-            },
-
-            s: {
-                x: 0,
-                y: 1
-            },
-
-            arrowleft: {
-                x: -1,
-                y: 0
-            },
-
-            a: {
-                x: -1,
-                y: 0
-            },
-
-            arrowright: {
-                x: 1,
-                y: 0
-            },
-
-            d: {
-                x: 1,
-                y: 0
-            }
-        };
-
-
-        if (key === " " && gameRunning) {
+        if (
+            key === " " &&
+            gameRunning
+        ) {
 
             event.preventDefault();
 
@@ -990,58 +832,131 @@ document.addEventListener(
         }
 
 
-        if (!controls[key]) {
+        if (!gameRunning) {
             return;
         }
 
-        event.preventDefault();
 
-
-        const newDirection =
-            controls[key];
-
-
-        /*
-            Prevent instant reverse.
-            Example: moving right cannot
-            instantly move left.
-        */
+        /* UP */
 
         if (
-            newDirection.x === -direction.x &&
-            newDirection.y === -direction.y
+
+            (
+                key === "arrowup" ||
+                key === "w"
+            ) &&
+
+            direction.y !== 1
+
         ) {
-            return;
+
+            nextDirection = {
+                x: 0,
+                y: -1
+            };
         }
 
 
-        nextDirection = {
-            ...newDirection
-        };
+        /* DOWN */
+
+        else if (
+
+            (
+                key === "arrowdown" ||
+                key === "s"
+            ) &&
+
+            direction.y !== -1
+
+        ) {
+
+            nextDirection = {
+                x: 0,
+                y: 1
+            };
+        }
+
+
+        /* LEFT */
+
+        else if (
+
+            (
+                key === "arrowleft" ||
+                key === "a"
+            ) &&
+
+            direction.x !== 1
+
+        ) {
+
+            nextDirection = {
+                x: -1,
+                y: 0
+            };
+        }
+
+
+        /* RIGHT */
+
+        else if (
+
+            (
+                key === "arrowright" ||
+                key === "d"
+            ) &&
+
+            direction.x !== -1
+
+        ) {
+
+            nextDirection = {
+                x: 1,
+                y: 0
+            };
+        }
+
+
+        if (
+
+            key === "arrowup" ||
+            key === "arrowdown" ||
+            key === "arrowleft" ||
+            key === "arrowright"
+
+        ) {
+
+            event.preventDefault();
+        }
+
     }
 );
 
 
 /* =========================================
-   MOBILE SWIPE CONTROLS
+   SWIPE CONTROL
+   ANYWHERE INSIDE GAME AREA
 ========================================= */
 
-const gameArea =
-    document.getElementById("gameArea");
+let touchStartX = 0;
+
+let touchStartY = 0;
 
 
 gameArea.addEventListener(
     "touchstart",
-    event => {
+    function(event) {
 
         const touch =
             event.changedTouches[0];
 
-        lastTouchX =
+
+        touchStartX =
             touch.clientX;
 
-        lastTouchY =
+        touchStartY =
             touch.clientY;
+
     },
     {
         passive: true
@@ -1051,64 +966,115 @@ gameArea.addEventListener(
 
 gameArea.addEventListener(
     "touchend",
-    event => {
+    function(event) {
 
         if (!gameRunning) {
             return;
         }
 
+
         const touch =
             event.changedTouches[0];
 
+
         const dx =
             touch.clientX -
-            lastTouchX;
+            touchStartX;
+
 
         const dy =
             touch.clientY -
-            lastTouchY;
+            touchStartY;
 
-        const minimumSwipe =
+
+        const minimum =
             20;
 
+
         if (
-            Math.abs(dx) < minimumSwipe &&
-            Math.abs(dy) < minimumSwipe
+
+            Math.abs(dx) < minimum &&
+
+            Math.abs(dy) < minimum
+
         ) {
+
             return;
         }
 
 
-        let newDirection;
-
-
-        if (Math.abs(dx) > Math.abs(dy)) {
-
-            newDirection =
-                dx > 0
-                    ? { x: 1, y: 0 }
-                    : { x: -1, y: 0 };
-
-        } else {
-
-            newDirection =
-                dy > 0
-                    ? { x: 0, y: 1 }
-                    : { x: 0, y: -1 };
-        }
-
+        /* HORIZONTAL */
 
         if (
-            newDirection.x === -direction.x &&
-            newDirection.y === -direction.y
+            Math.abs(dx) >
+            Math.abs(dy)
         ) {
-            return;
+
+            if (
+
+                dx > 0 &&
+
+                direction.x !== -1
+
+            ) {
+
+                nextDirection = {
+                    x: 1,
+                    y: 0
+                };
+
+            }
+
+            else if (
+
+                dx < 0 &&
+
+                direction.x !== 1
+
+            ) {
+
+                nextDirection = {
+                    x: -1,
+                    y: 0
+                };
+            }
         }
 
 
-        nextDirection = {
-            ...newDirection
-        };
+        /* VERTICAL */
+
+        else {
+
+            if (
+
+                dy > 0 &&
+
+                direction.y !== -1
+
+            ) {
+
+                nextDirection = {
+                    x: 0,
+                    y: 1
+                };
+
+            }
+
+            else if (
+
+                dy < 0 &&
+
+                direction.y !== 1
+
+            ) {
+
+                nextDirection = {
+                    x: 0,
+                    y: -1
+                };
+            }
+        }
+
     },
     {
         passive: true
@@ -1117,101 +1083,77 @@ gameArea.addEventListener(
 
 
 /* =========================================
-   BUTTON EVENTS
+   DASHBOARD BUTTONS
 ========================================= */
 
-playBtn.addEventListener(
+playButton.addEventListener(
     "click",
-    () => {
+    function() {
 
         showScreen(gameScreen);
 
-        setTimeout(() => {
-            resizeCanvas();
-            startGame();
-        }, 50);
+        setTimeout(
+            startGame,
+            50
+        );
     }
 );
 
 
-startRoundBtn.addEventListener(
+statsButton.addEventListener(
     "click",
-    startGame
-);
+    function() {
 
+        updateStatsUI();
 
-pauseBtn.addEventListener(
-    "click",
-    togglePause
-);
-
-
-homeFromGame.addEventListener(
-    "click",
-    () => {
-
-        clearInterval(gameLoop);
-
-        gameRunning = false;
-        gamePaused = false;
-
-        updateDashboard();
-
-        showScreen(dashboard);
-    }
-);
-
-
-statsBtn.addEventListener(
-    "click",
-    () => {
-
-        updateDashboard();
         showScreen(statsScreen);
     }
 );
 
 
-settingsBtn.addEventListener(
+howButton.addEventListener(
     "click",
-    () => {
+    function() {
+
+        showScreen(howScreen);
+    }
+);
+
+
+settingsButton.addEventListener(
+    "click",
+    function() {
 
         showScreen(settingsScreen);
     }
 );
 
 
-howToPlayBtn.addEventListener(
+/* =========================================
+   BACK BUTTONS
+========================================= */
+
+statsBack.addEventListener(
     "click",
-    () => {
-
-        showScreen(howToPlayScreen);
-    }
-);
-
-
-backFromStats.addEventListener(
-    "click",
-    () => {
-
-        updateDashboard();
-        showScreen(dashboard);
-    }
-);
-
-
-backFromSettings.addEventListener(
-    "click",
-    () => {
+    function() {
 
         showScreen(dashboard);
     }
 );
 
 
-backFromHowToPlay.addEventListener(
+howBack.addEventListener(
     "click",
-    () => {
+    function() {
+
+        showScreen(dashboard);
+    }
+);
+
+
+settingsBack.addEventListener(
+    "click",
+    function() {
 
         showScreen(dashboard);
     }
@@ -1219,46 +1161,95 @@ backFromHowToPlay.addEventListener(
 
 
 /* =========================================
-   SETTINGS STORAGE
+   HOME FROM GAME
 ========================================= */
 
-const SOUND_KEY =
-    "snakeRushSound";
+homeButton.addEventListener(
+    "click",
+    function() {
 
-const VIBRATION_KEY =
-    "snakeRushVibration";
+        clearInterval(gameTimer);
 
+        gameRunning = false;
 
-function loadSettings() {
+        gamePaused = false;
 
-    const savedSound =
-        localStorage.getItem(SOUND_KEY);
+        updateStatsUI();
 
-    const savedVibration =
-        localStorage.getItem(VIBRATION_KEY);
-
-
-    if (savedSound !== null) {
-
-        soundToggle.checked =
-            savedSound === "true";
+        showScreen(dashboard);
     }
+);
 
 
-    if (savedVibration !== null) {
+/* =========================================
+   PAUSE BUTTON
+========================================= */
 
-        vibrationToggle.checked =
-            savedVibration === "true";
+pauseButton.addEventListener(
+    "click",
+    function() {
+
+        togglePause();
     }
+);
+
+
+/* =========================================
+   OVERLAY BUTTON
+========================================= */
+
+overlayButton.addEventListener(
+    "click",
+    function() {
+
+        if (gamePaused) {
+
+            togglePause();
+
+        } else {
+
+            startGame();
+        }
+    }
+);
+
+
+/* =========================================
+   SETTINGS
+========================================= */
+
+const savedSound =
+    localStorage.getItem(
+        "snakeRushSound"
+    );
+
+
+const savedVibration =
+    localStorage.getItem(
+        "snakeRushVibration"
+    );
+
+
+if (savedSound !== null) {
+
+    soundToggle.checked =
+        savedSound === "true";
+}
+
+
+if (savedVibration !== null) {
+
+    vibrationToggle.checked =
+        savedVibration === "true";
 }
 
 
 soundToggle.addEventListener(
     "change",
-    () => {
+    function() {
 
         localStorage.setItem(
-            SOUND_KEY,
+            "snakeRushSound",
             soundToggle.checked
         );
     }
@@ -1267,10 +1258,10 @@ soundToggle.addEventListener(
 
 vibrationToggle.addEventListener(
     "change",
-    () => {
+    function() {
 
         localStorage.setItem(
-            VIBRATION_KEY,
+            "snakeRushVibration",
             vibrationToggle.checked
         );
     }
@@ -1278,29 +1269,28 @@ vibrationToggle.addEventListener(
 
 
 /* =========================================
-   WINDOW RESIZE
+   RESIZE
 ========================================= */
 
 window.addEventListener(
     "resize",
-    () => {
+    function() {
 
-        if (
-            gameScreen.classList.contains("active")
-        ) {
-            resizeCanvas();
-        }
+        resizeCanvas();
     }
 );
 
 
 /* =========================================
-   INITIAL LOAD
+   INITIALIZE
 ========================================= */
 
-loadSettings();
-updateDashboard();
+updateStatsUI();
+
+createSnake();
+
+createFood();
 
 resizeCanvas();
-```
 
+draw();
