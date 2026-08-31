@@ -33,6 +33,9 @@ const howButton =
 const settingsButton =
     document.getElementById("settingsButton");
 
+const detailsButton =
+    document.getElementById("detailsButton");
+
 
 const statsBack =
     document.getElementById("statsBack");
@@ -158,11 +161,6 @@ const speedButtons =
 
 const GRID_SIZE = 20;
 
-
-/*
-   Lower number = faster.
-*/
-
 const SPEEDS = {
 
     slow: 190,
@@ -191,9 +189,7 @@ let selectedSpeed =
     ) || "medium";
 
 
-if (
-    !SPEEDS[selectedSpeed]
-) {
+if (!SPEEDS[selectedSpeed]) {
 
     selectedSpeed =
         "medium";
@@ -284,7 +280,7 @@ function saveStats() {
 
 
 /* ==========================================
-   SETTINGS
+   SETTINGS LOAD
 ========================================== */
 
 const savedSound =
@@ -302,6 +298,7 @@ if (savedSound !== null) {
 
     soundToggle.checked =
         savedSound === "true";
+
 }
 
 
@@ -309,6 +306,7 @@ if (savedVibration !== null) {
 
     vibrationToggle.checked =
         savedVibration === "true";
+
 }
 
 
@@ -406,6 +404,7 @@ function showScreen(screen) {
             resizeCanvas,
             30
         );
+
     }
 
 }
@@ -431,6 +430,7 @@ function resizeCanvas() {
 
 
     canvasSize = size;
+
 
     const pixelRatio =
         Math.min(
@@ -477,7 +477,7 @@ function resizeCanvas() {
 
 
 /* ==========================================
-   SNAKE RESET
+   RESET SNAKE
 ========================================== */
 
 function resetSnake() {
@@ -509,7 +509,7 @@ function resetSnake() {
 
 
 /* ==========================================
-   FOOD
+   CREATE FOOD
 ========================================== */
 
 function createFood() {
@@ -564,6 +564,7 @@ function startGame() {
         );
 
         gameLoop = null;
+
     }
 
 
@@ -631,6 +632,7 @@ function updateGame() {
     ) {
 
         return;
+
     }
 
 
@@ -652,9 +654,7 @@ function updateGame() {
     };
 
 
-    /* ======================
-       WALL
-    ====================== */
+    /* WALL */
 
     if (
 
@@ -671,6 +671,7 @@ function updateGame() {
         endGame();
 
         return;
+
     }
 
 
@@ -679,11 +680,6 @@ function updateGame() {
         newHead.x === food.x &&
         newHead.y === food.y;
 
-
-    /*
-       If not eating, tail will move away,
-       so it does not need to be checked.
-    */
 
     const bodyToCheck =
         eatingFood
@@ -694,9 +690,7 @@ function updateGame() {
             );
 
 
-    /* ======================
-       BODY
-    ====================== */
+    /* BODY */
 
     const hitBody =
         bodyToCheck.some(
@@ -712,21 +706,18 @@ function updateGame() {
         endGame();
 
         return;
+
     }
 
 
-    /* ======================
-       MOVE
-    ====================== */
+    /* MOVE */
 
     snake.unshift(
         newHead
     );
 
 
-    /* ======================
-       FOOD
-    ====================== */
+    /* FOOD */
 
     if (eatingFood) {
 
@@ -747,6 +738,7 @@ function updateGame() {
 
             stats.longestSnake =
                 snake.length;
+
         }
 
 
@@ -782,6 +774,7 @@ function endGame() {
     if (!gameRunning) {
 
         return;
+
     }
 
 
@@ -799,6 +792,7 @@ function endGame() {
         );
 
         gameLoop = null;
+
     }
 
 
@@ -817,6 +811,7 @@ function endGame() {
             score;
 
         newRecord = true;
+
     }
 
 
@@ -871,6 +866,7 @@ function togglePause() {
     if (!gameRunning) {
 
         return;
+
     }
 
 
@@ -926,12 +922,9 @@ function setDirection(x, y) {
     if (!gameRunning) {
 
         return;
+
     }
 
-
-    /*
-       Prevent reversing directly.
-    */
 
     if (
 
@@ -941,6 +934,7 @@ function setDirection(x, y) {
     ) {
 
         return;
+
     }
 
 
@@ -952,6 +946,7 @@ function setDirection(x, y) {
     ) {
 
         return;
+
     }
 
 
@@ -989,12 +984,14 @@ document.addEventListener(
             }
 
             return;
+
         }
 
 
         if (!gameRunning) {
 
             return;
+
         }
 
 
@@ -1075,6 +1072,7 @@ gameArea.addEventListener(
         if (!gameRunning) {
 
             return;
+
         }
 
 
@@ -1107,6 +1105,7 @@ gameArea.addEventListener(
         ) {
 
             return;
+
         }
 
 
@@ -1141,6 +1140,7 @@ gameArea.addEventListener(
         ) {
 
             return;
+
         }
 
 
@@ -1209,10 +1209,6 @@ function drawBackground() {
         canvasSize
     );
 
-
-    /*
-       Subtle grid
-    */
 
     ctx.strokeStyle =
         "rgba(255,255,255,.035)";
@@ -1284,10 +1280,6 @@ function drawFood() {
         cellSize * .30;
 
 
-    /*
-       Glow
-    */
-
     ctx.beginPath();
 
     ctx.arc(
@@ -1304,10 +1296,6 @@ function drawFood() {
     ctx.fill();
 
 
-    /*
-       Apple
-    */
-
     ctx.beginPath();
 
     ctx.arc(
@@ -1323,10 +1311,6 @@ function drawFood() {
 
     ctx.fill();
 
-
-    /*
-       Leaf
-    */
 
     ctx.beginPath();
 
@@ -1560,6 +1544,7 @@ function draw() {
     ) {
 
         return;
+
     }
 
 
@@ -1594,6 +1579,7 @@ function getAudioContext() {
         } catch {
 
             return null;
+
         }
 
     }
@@ -1614,6 +1600,7 @@ function playTone(
     ) {
 
         return;
+
     }
 
 
@@ -1624,6 +1611,7 @@ function playTone(
     if (!audio) {
 
         return;
+
     }
 
 
@@ -1635,6 +1623,7 @@ function playTone(
         ) {
 
             audio.resume();
+
         }
 
 
@@ -1687,7 +1676,7 @@ function playTone(
 
     } catch {
 
-        /* Sound is optional */
+        /* Sound optional */
 
     }
 
@@ -1833,7 +1822,20 @@ settingsButton.addEventListener(
 );
 
 
-/* BACK BUTTONS */
+/* GAME DETAILS */
+
+detailsButton.addEventListener(
+    "click",
+    function() {
+
+        window.location.href =
+            "details.html";
+
+    }
+);
+
+
+/* BACK */
 
 statsBack.addEventListener(
     "click",
@@ -1886,6 +1888,7 @@ homeButton.addEventListener(
             );
 
             gameLoop = null;
+
         }
 
 
@@ -1928,6 +1931,7 @@ overlayButton.addEventListener(
             togglePause();
 
             return;
+
         }
 
 
@@ -1957,6 +1961,7 @@ speedButtons.forEach(
                 ) {
 
                     return;
+
                 }
 
 
@@ -1980,7 +1985,7 @@ speedButtons.forEach(
 
 
 /* ==========================================
-   SOUND SETTINGS
+   SOUND
 ========================================== */
 
 soundToggle.addEventListener(
@@ -1999,7 +2004,7 @@ soundToggle.addEventListener(
 
 
 /* ==========================================
-   VIBRATION SETTINGS
+   VIBRATION
 ========================================== */
 
 vibrationToggle.addEventListener(
