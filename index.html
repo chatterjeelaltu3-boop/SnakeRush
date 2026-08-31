@@ -2,83 +2,85 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
-    <meta
-        name="theme-color"
-        content="#071521"
-    >
+    <meta name="theme-color" content="#06141f">
 
     <title>SnakeRush</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
 <div class="app">
 
+
     <!-- =========================
          DASHBOARD
     ========================== -->
 
-    <section
-        id="dashboard"
-        class="screen active"
-    >
+    <main id="dashboard" class="screen active">
 
-        <header class="header">
+        <div class="brand">
 
             <img
                 src="snakerush-logo.png"
-                class="logo"
-                alt="SnakeRush Logo"
+                alt="SnakeRush"
+                class="main-logo"
+                onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';"
             >
 
-            <h1>SnakeRush</h1>
-
-            <p class="tagline">
-                Eat. Grow. Rush. Survive.
-            </p>
-
-        </header>
-
-
-        <div class="welcome-card">
-
-            <div class="snake-icon">
+            <div id="logoFallback" class="logo-fallback">
                 🐍
             </div>
 
-            <h2>Ready to Rush?</h2>
+            <h1>SnakeRush</h1>
 
             <p>
-                Grow your snake, collect food
+                Eat. Grow. Rush. Survive.
+            </p>
+
+        </div>
+
+
+        <!-- WELCOME -->
+
+        <div class="welcome-card">
+
+            <div class="welcome-emoji">
+                🐍
+            </div>
+
+            <h2>
+                Ready to Rush?
+            </h2>
+
+            <p>
+                Collect food, grow your snake
                 and beat your high score.
             </p>
 
         </div>
 
 
-        <!-- DASHBOARD STATS -->
+        <!-- STATS -->
 
-        <div class="dashboard-stats">
+        <div class="quick-stats">
 
-            <div class="stat-card">
+            <div class="quick-card">
 
                 <span>🏆</span>
 
-                <small>
-                    HIGH SCORE
-                </small>
+                <small>HIGH SCORE</small>
 
                 <strong id="dashboardHighScore">
                     0
@@ -87,13 +89,11 @@
             </div>
 
 
-            <div class="stat-card">
+            <div class="quick-card">
 
                 <span>🍎</span>
 
-                <small>
-                    FOOD
-                </small>
+                <small>FOOD</small>
 
                 <strong id="dashboardFood">
                     0
@@ -102,13 +102,11 @@
             </div>
 
 
-            <div class="stat-card">
+            <div class="quick-card">
 
                 <span>🎮</span>
 
-                <small>
-                    GAMES
-                </small>
+                <small>GAMES</small>
 
                 <strong id="dashboardGames">
                     0
@@ -119,13 +117,14 @@
         </div>
 
 
-        <!-- MAIN BUTTONS -->
+        <!-- MENU -->
 
         <div class="menu">
 
             <button
                 id="playButton"
-                class="primary-button"
+                class="btn btn-primary"
+                type="button"
             >
                 🎮 PLAY SNAKE
             </button>
@@ -133,7 +132,8 @@
 
             <button
                 id="statsButton"
-                class="menu-button"
+                class="btn btn-secondary"
+                type="button"
             >
                 📊 STATISTICS
             </button>
@@ -141,7 +141,8 @@
 
             <button
                 id="howButton"
-                class="menu-button"
+                class="btn btn-secondary"
+                type="button"
             >
                 ❓ HOW TO PLAY
             </button>
@@ -149,43 +150,80 @@
 
             <button
                 id="settingsButton"
-                class="menu-button"
+                class="btn btn-secondary"
+                type="button"
             >
                 ⚙️ SETTINGS
             </button>
 
         </div>
 
-    </section>
+
+        <!-- FOOTER -->
+
+        <footer class="footer">
+
+            <div class="footer-line"></div>
+
+            <img
+                src="snakerush-logo.png"
+                alt="SnakeRush Logo"
+                class="footer-logo"
+                onerror="this.style.display='none';"
+            >
+
+            <h2>
+                SnakeRush
+            </h2>
+
+            <p class="footer-tagline">
+                Eat. Grow. Rush. Survive.
+            </p>
+
+            <p class="made">
+                SnakeRush is made by Ayush Chatterjee
+            </p>
+
+            <p class="founder">
+                Founder: SnakeRush.com
+            </p>
+
+            <p class="copyright">
+                © 2026 SnakeRush. All rights reserved.
+            </p>
+
+        </footer>
+
+    </main>
+
 
 
     <!-- =========================
-         GAME SCREEN
+         GAME
     ========================== -->
 
-    <section
-        id="gameScreen"
-        class="screen"
-    >
+    <main id="gameScreen" class="screen">
 
-        <div class="game-header">
+        <div class="game-topbar">
 
             <button
                 id="homeButton"
-                class="small-button"
+                class="top-button"
+                type="button"
             >
                 ← HOME
             </button>
 
 
-            <div class="game-title">
+            <div class="game-brand">
                 🐍 SnakeRush
             </div>
 
 
             <button
                 id="pauseButton"
-                class="small-button"
+                class="top-button pause"
+                type="button"
             >
                 ⏸
             </button>
@@ -197,7 +235,7 @@
 
         <div class="score-row">
 
-            <div class="score-card">
+            <div class="score-box">
 
                 <span>
                     SCORE
@@ -210,10 +248,10 @@
             </div>
 
 
-            <div class="score-card">
+            <div class="score-box">
 
                 <span>
-                    HIGH SCORE
+                    BEST
                 </span>
 
                 <strong id="gameHighScore">
@@ -232,9 +270,7 @@
             class="game-area"
         >
 
-            <canvas
-                id="gameCanvas"
-            ></canvas>
+            <canvas id="gameCanvas"></canvas>
 
 
             <div
@@ -242,7 +278,7 @@
                 class="game-overlay"
             >
 
-                <div class="overlay-box">
+                <div class="overlay-content">
 
                     <div
                         id="overlayIcon"
@@ -251,21 +287,19 @@
                         🐍
                     </div>
 
-
                     <h2 id="overlayTitle">
                         Ready to Rush?
                     </h2>
 
-
                     <p id="overlayText">
-                        Collect the food
-                        and grow your snake.
+                        Swipe anywhere to control
+                        your snake.
                     </p>
-
 
                     <button
                         id="overlayButton"
-                        class="primary-button"
+                        class="btn btn-primary overlay-btn"
+                        type="button"
                     >
                         START GAME
                     </button>
@@ -277,35 +311,41 @@
         </div>
 
 
-        <div class="control-note">
+        <!-- MOBILE HELP -->
+
+        <div class="mobile-help">
 
             <div>
-                ⌨️ Arrow Keys / WASD
+                📱 Swipe anywhere
             </div>
 
             <div>
-                📱 Swipe Anywhere
+                ⌨️ Arrow / WASD
             </div>
 
         </div>
 
-    </section>
+
+        <p class="game-tip">
+            Tip: Don't turn directly into yourself!
+        </p>
+
+    </main>
+
 
 
     <!-- =========================
          STATISTICS
     ========================== -->
 
-    <section
-        id="statsScreen"
-        class="screen"
-    >
+    <main id="statsScreen" class="screen">
 
-        <div class="inner-header">
+        <div class="page-header">
 
             <button
                 id="statsBack"
-                class="back-button"
+                class="back-btn"
+                type="button"
             >
                 ←
             </button>
@@ -317,9 +357,9 @@
         </div>
 
 
-        <div class="large-stat-grid">
+        <div class="stat-grid">
 
-            <div class="large-stat">
+            <div class="big-stat">
 
                 <span>🏆</span>
 
@@ -334,7 +374,7 @@
             </div>
 
 
-            <div class="large-stat">
+            <div class="big-stat">
 
                 <span>🍎</span>
 
@@ -349,7 +389,7 @@
             </div>
 
 
-            <div class="large-stat">
+            <div class="big-stat">
 
                 <span>🎮</span>
 
@@ -364,7 +404,7 @@
             </div>
 
 
-            <div class="large-stat">
+            <div class="big-stat">
 
                 <span>🐍</span>
 
@@ -380,23 +420,22 @@
 
         </div>
 
-    </section>
+    </main>
+
 
 
     <!-- =========================
          HOW TO PLAY
     ========================== -->
 
-    <section
-        id="howScreen"
-        class="screen"
-    >
+    <main id="howScreen" class="screen">
 
-        <div class="inner-header">
+        <div class="page-header">
 
             <button
                 id="howBack"
-                class="back-button"
+                class="back-btn"
+                type="button"
             >
                 ←
             </button>
@@ -408,96 +447,125 @@
         </div>
 
 
-        <div class="instruction-card">
+        <div class="instructions">
 
             <div class="instruction">
-                <span>🍎</span>
+
+                <div class="instruction-icon">
+                    🍎
+                </div>
 
                 <div>
-                    <h3>Collect Food</h3>
+                    <h3>
+                        Collect Food
+                    </h3>
 
                     <p>
-                        Eat the food to increase
-                        your score and grow.
+                        Eat the food to earn
+                        points and grow.
                     </p>
                 </div>
+
             </div>
 
 
             <div class="instruction">
-                <span>🐍</span>
+
+                <div class="instruction-icon">
+                    🐍
+                </div>
 
                 <div>
-                    <h3>Grow Your Snake</h3>
+                    <h3>
+                        Grow Your Snake
+                    </h3>
 
                     <p>
-                        Every food makes your
-                        snake longer.
+                        Every food makes
+                        your snake longer.
                     </p>
                 </div>
+
             </div>
 
 
             <div class="instruction">
-                <span>💥</span>
+
+                <div class="instruction-icon">
+                    💥
+                </div>
 
                 <div>
-                    <h3>Avoid Collisions</h3>
+                    <h3>
+                        Avoid Collision
+                    </h3>
 
                     <p>
-                        Don't hit the wall or
-                        your own body.
+                        Don't hit the wall
+                        or your own body.
                     </p>
                 </div>
+
             </div>
 
 
             <div class="instruction">
-                <span>⌨️</span>
+
+                <div class="instruction-icon">
+                    📱
+                </div>
 
                 <div>
-                    <h3>Keyboard</h3>
+                    <h3>
+                        Mobile Control
+                    </h3>
+
+                    <p>
+                        Swipe anywhere inside
+                        the game to move.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="instruction">
+
+                <div class="instruction-icon">
+                    ⌨️
+                </div>
+
+                <div>
+                    <h3>
+                        Keyboard Control
+                    </h3>
 
                     <p>
                         Use Arrow Keys or
                         W, A, S, D.
                     </p>
                 </div>
-            </div>
 
-
-            <div class="instruction">
-                <span>📱</span>
-
-                <div>
-                    <h3>Mobile</h3>
-
-                    <p>
-                        Swipe anywhere on the
-                        game area to move.
-                    </p>
-                </div>
             </div>
 
         </div>
 
-    </section>
+    </main>
+
 
 
     <!-- =========================
          SETTINGS
     ========================== -->
 
-    <section
-        id="settingsScreen"
-        class="screen"
-    >
+    <main id="settingsScreen" class="screen">
 
-        <div class="inner-header">
+        <div class="page-header">
 
             <button
                 id="settingsBack"
-                class="back-button"
+                class="back-btn"
+                type="button"
             >
                 ←
             </button>
@@ -509,21 +577,22 @@
         </div>
 
 
-        <div class="settings-card">
+        <div class="settings">
 
-            <div class="setting-row">
+            <div class="setting">
 
                 <div>
 
-                    <strong>
+                    <h3>
                         🔊 Game Sound
-                    </strong>
+                    </h3>
 
                     <p>
-                        Food and game sounds
+                        Sound effects during gameplay
                     </p>
 
                 </div>
+
 
                 <label class="switch">
 
@@ -533,26 +602,27 @@
                         checked
                     >
 
-                    <span class="slider"></span>
+                    <span></span>
 
                 </label>
 
             </div>
 
 
-            <div class="setting-row">
+            <div class="setting">
 
                 <div>
 
-                    <strong>
+                    <h3>
                         📳 Vibration
-                    </strong>
+                    </h3>
 
                     <p>
-                        Vibration on mobile
+                        Vibration when collecting food
                     </p>
 
                 </div>
+
 
                 <label class="switch">
 
@@ -562,7 +632,7 @@
                         checked
                     >
 
-                    <span class="slider"></span>
+                    <span></span>
 
                 </label>
 
@@ -570,50 +640,7 @@
 
         </div>
 
-    </section>
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer class="footer">
-
-        <div class="footer-line"></div>
-
-
-        <img
-            src="snakerush-logo.png"
-            class="footer-logo"
-            alt="SnakeRush Logo"
-        >
-
-
-        <h2>
-            SnakeRush
-        </h2>
-
-
-        <p class="footer-tagline">
-            Eat. Grow. Rush. Survive.
-        </p>
-
-
-        <p class="made-by">
-            SnakeRush is made by Ayush Chatterjee
-        </p>
-
-
-        <p class="founder">
-            Founder: SnakeRush.com
-        </p>
-
-
-        <p class="copyright">
-            © 2026 SnakeRush. All rights reserved.
-        </p>
-
-    </footer>
+    </main>
 
 </div>
 
@@ -621,4 +648,5 @@
 <script src="script.js"></script>
 
 </body>
+
 </html>
