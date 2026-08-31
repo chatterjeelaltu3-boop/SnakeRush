@@ -1,301 +1,624 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0b1220">
 
-    <title>SnakeRush — Eat. Grow. Rush. Survive.</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <meta
+        name="theme-color"
+        content="#071521"
+    >
+
+    <title>SnakeRush</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 
 <body>
 
-    <main class="app">
+<div class="app">
 
-        <!-- Dashboard -->
-        <section id="dashboard" class="screen active">
+    <!-- =========================
+         DASHBOARD
+    ========================== -->
 
-            <div class="brand">
-                <img src="snakerush-logo.png" alt="SnakeRush Logo" class="logo">
+    <section
+        id="dashboard"
+        class="screen active"
+    >
 
-                <h1>SnakeRush</h1>
-                <p class="tagline">Eat. Grow. Rush. Survive.</p>
+        <header class="header">
+
+            <img
+                src="snakerush-logo.png"
+                class="logo"
+                alt="SnakeRush Logo"
+            >
+
+            <h1>SnakeRush</h1>
+
+            <p class="tagline">
+                Eat. Grow. Rush. Survive.
+            </p>
+
+        </header>
+
+
+        <div class="welcome-card">
+
+            <div class="snake-icon">
+                🐍
             </div>
 
-            <!-- High Score -->
-            <div class="high-score-card">
-                <span class="trophy">🏆</span>
+            <h2>Ready to Rush?</h2>
+
+            <p>
+                Grow your snake, collect food
+                and beat your high score.
+            </p>
+
+        </div>
+
+
+        <!-- DASHBOARD STATS -->
+
+        <div class="dashboard-stats">
+
+            <div class="stat-card">
+
+                <span>🏆</span>
+
+                <small>
+                    HIGH SCORE
+                </small>
+
+                <strong id="dashboardHighScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>🍎</span>
+
+                <small>
+                    FOOD
+                </small>
+
+                <strong id="dashboardFood">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>🎮</span>
+
+                <small>
+                    GAMES
+                </small>
+
+                <strong id="dashboardGames">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN BUTTONS -->
+
+        <div class="menu">
+
+            <button
+                id="playButton"
+                class="primary-button"
+            >
+                🎮 PLAY SNAKE
+            </button>
+
+
+            <button
+                id="statsButton"
+                class="menu-button"
+            >
+                📊 STATISTICS
+            </button>
+
+
+            <button
+                id="howButton"
+                class="menu-button"
+            >
+                ❓ HOW TO PLAY
+            </button>
+
+
+            <button
+                id="settingsButton"
+                class="menu-button"
+            >
+                ⚙️ SETTINGS
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         GAME SCREEN
+    ========================== -->
+
+    <section
+        id="gameScreen"
+        class="screen"
+    >
+
+        <div class="game-header">
+
+            <button
+                id="homeButton"
+                class="small-button"
+            >
+                ← HOME
+            </button>
+
+
+            <div class="game-title">
+                🐍 SnakeRush
+            </div>
+
+
+            <button
+                id="pauseButton"
+                class="small-button"
+            >
+                ⏸
+            </button>
+
+        </div>
+
+
+        <!-- SCORE -->
+
+        <div class="score-row">
+
+            <div class="score-card">
+
+                <span>
+                    SCORE
+                </span>
+
+                <strong id="score">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="score-card">
+
+                <span>
+                    HIGH SCORE
+                </span>
+
+                <strong id="gameHighScore">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- GAME -->
+
+        <div
+            id="gameArea"
+            class="game-area"
+        >
+
+            <canvas
+                id="gameCanvas"
+            ></canvas>
+
+
+            <div
+                id="gameOverlay"
+                class="game-overlay"
+            >
+
+                <div class="overlay-box">
+
+                    <div
+                        id="overlayIcon"
+                        class="overlay-icon"
+                    >
+                        🐍
+                    </div>
+
+
+                    <h2 id="overlayTitle">
+                        Ready to Rush?
+                    </h2>
+
+
+                    <p id="overlayText">
+                        Collect the food
+                        and grow your snake.
+                    </p>
+
+
+                    <button
+                        id="overlayButton"
+                        class="primary-button"
+                    >
+                        START GAME
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="control-note">
+
+            <div>
+                ⌨️ Arrow Keys / WASD
+            </div>
+
+            <div>
+                📱 Swipe Anywhere
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+
+    <section
+        id="statsScreen"
+        class="screen"
+    >
+
+        <div class="inner-header">
+
+            <button
+                id="statsBack"
+                class="back-button"
+            >
+                ←
+            </button>
+
+            <h2>
+                📊 Statistics
+            </h2>
+
+        </div>
+
+
+        <div class="large-stat-grid">
+
+            <div class="large-stat">
+
+                <span>🏆</span>
+
+                <small>
+                    BEST SCORE
+                </small>
+
+                <strong id="statsHighScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="large-stat">
+
+                <span>🍎</span>
+
+                <small>
+                    FOOD COLLECTED
+                </small>
+
+                <strong id="statsFood">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="large-stat">
+
+                <span>🎮</span>
+
+                <small>
+                    GAMES PLAYED
+                </small>
+
+                <strong id="statsGames">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="large-stat">
+
+                <span>🐍</span>
+
+                <small>
+                    LONGEST SNAKE
+                </small>
+
+                <strong id="statsLongest">
+                    3
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         HOW TO PLAY
+    ========================== -->
+
+    <section
+        id="howScreen"
+        class="screen"
+    >
+
+        <div class="inner-header">
+
+            <button
+                id="howBack"
+                class="back-button"
+            >
+                ←
+            </button>
+
+            <h2>
+                ❓ How to Play
+            </h2>
+
+        </div>
+
+
+        <div class="instruction-card">
+
+            <div class="instruction">
+                <span>🍎</span>
 
                 <div>
-                    <p>HIGH SCORE</p>
-                    <h2 id="dashboardHighScore">0</h2>
+                    <h3>Collect Food</h3>
+
+                    <p>
+                        Eat the food to increase
+                        your score and grow.
+                    </p>
                 </div>
             </div>
 
-            <!-- Main Buttons -->
-            <div class="menu">
 
-                <button class="menu-btn play-btn" id="playBtn">
-                    <span>🎮</span>
-                    <div>
-                        <strong>Play Game</strong>
-                        <small>Start a new run</small>
-                    </div>
-                    <b>›</b>
-                </button>
-
-                <button class="menu-btn" id="statsBtn">
-                    <span>📊</span>
-                    <div>
-                        <strong>Statistics</strong>
-                        <small>View your progress</small>
-                    </div>
-                    <b>›</b>
-                </button>
-
-                <button class="menu-btn" id="settingsBtn">
-                    <span>⚙️</span>
-                    <div>
-                        <strong>Settings</strong>
-                        <small>Customize your game</small>
-                    </div>
-                    <b>›</b>
-                </button>
-
-                <button class="menu-btn" id="howToPlayBtn">
-                    <span>❓</span>
-                    <div>
-                        <strong>How to Play</strong>
-                        <small>Learn the controls</small>
-                    </div>
-                    <b>›</b>
-                </button>
-
-            </div>
-
-            <!-- Quick Statistics -->
-            <div class="quick-stats">
-
-                <div class="stat">
-                    <span>🍎</span>
-                    <strong id="foodCollected">0</strong>
-                    <small>Food Collected</small>
-                </div>
-
-                <div class="stat">
-                    <span>🎮</span>
-                    <strong id="gamesPlayed">0</strong>
-                    <small>Games Played</small>
-                </div>
-
-                <div class="stat">
-                    <span>🐍</span>
-                    <strong id="longestSnake">3</strong>
-                    <small>Longest Snake</small>
-                </div>
-
-            </div>
-
-            <!-- Footer -->
-            <footer>
-                <p>SnakeRush is made by Ayush Chatterjee</p>
-                <p>Founder: SnakeRush.com</p>
-            </footer>
-
-        </section>
-
-
-        <!-- Game Screen -->
-        <section id="gameScreen" class="screen">
-
-            <div class="game-header">
-
-                <button id="homeFromGame" class="icon-btn">‹</button>
+            <div class="instruction">
+                <span>🐍</span>
 
                 <div>
-                    <h2>🐍 SnakeRush</h2>
-                    <p>Eat. Grow. Rush. Survive.</p>
+                    <h3>Grow Your Snake</h3>
+
+                    <p>
+                        Every food makes your
+                        snake longer.
+                    </p>
                 </div>
-
-                <button id="pauseBtn" class="icon-btn">Ⅱ</button>
-
             </div>
 
-            <div class="game-info">
+
+            <div class="instruction">
+                <span>💥</span>
 
                 <div>
-                    <span>SCORE</span>
-                    <strong id="score">0</strong>
+                    <h3>Avoid Collisions</h3>
+
+                    <p>
+                        Don't hit the wall or
+                        your own body.
+                    </p>
                 </div>
+            </div>
+
+
+            <div class="instruction">
+                <span>⌨️</span>
 
                 <div>
-                    <span>BEST</span>
-                    <strong id="gameHighScore">0</strong>
-                </div>
+                    <h3>Keyboard</h3>
 
-            </div>
-
-            <div id="gameArea" class="game-area">
-                <canvas id="gameCanvas"></canvas>
-
-                <div id="gameMessage" class="game-message">
-                    <h2>Ready?</h2>
-                    <p>Swipe or use arrow keys</p>
-                    <button id="startRoundBtn">START</button>
+                    <p>
+                        Use Arrow Keys or
+                        W, A, S, D.
+                    </p>
                 </div>
             </div>
 
-        </section>
 
+            <div class="instruction">
+                <span>📱</span>
 
-        <!-- Statistics Screen -->
-        <section id="statsScreen" class="screen">
+                <div>
+                    <h3>Mobile</h3>
 
-            <div class="page-header">
-                <button class="back-btn" id="backFromStats">‹</button>
-                <h2>📊 Statistics</h2>
+                    <p>
+                        Swipe anywhere on the
+                        game area to move.
+                    </p>
+                </div>
             </div>
 
-            <div class="stats-grid">
+        </div>
 
-                <div class="big-stat">
-                    <span>🏆</span>
-                    <small>Best Score</small>
-                    <strong id="statsBestScore">0</strong>
+    </section>
+
+
+    <!-- =========================
+         SETTINGS
+    ========================== -->
+
+    <section
+        id="settingsScreen"
+        class="screen"
+    >
+
+        <div class="inner-header">
+
+            <button
+                id="settingsBack"
+                class="back-button"
+            >
+                ←
+            </button>
+
+            <h2>
+                ⚙️ Settings
+            </h2>
+
+        </div>
+
+
+        <div class="settings-card">
+
+            <div class="setting-row">
+
+                <div>
+
+                    <strong>
+                        🔊 Game Sound
+                    </strong>
+
+                    <p>
+                        Food and game sounds
+                    </p>
+
                 </div>
 
-                <div class="big-stat">
-                    <span>🍎</span>
-                    <small>Food Collected</small>
-                    <strong id="statsFood">0</strong>
-                </div>
+                <label class="switch">
 
-                <div class="big-stat">
-                    <span>🎮</span>
-                    <small>Games Played</small>
-                    <strong id="statsGames">0</strong>
-                </div>
+                    <input
+                        type="checkbox"
+                        id="soundToggle"
+                        checked
+                    >
 
-                <div class="big-stat">
-                    <span>🐍</span>
-                    <small>Longest Snake</small>
-                    <strong id="statsLongest">3</strong>
-                </div>
+                    <span class="slider"></span>
 
-            </div>
-
-        </section>
-
-
-        <!-- Settings Screen -->
-        <section id="settingsScreen" class="screen">
-
-            <div class="page-header">
-                <button class="back-btn" id="backFromSettings">‹</button>
-                <h2>⚙️ Settings</h2>
-            </div>
-
-            <div class="settings-list">
-
-                <div class="setting-item">
-                    <div>
-                        <strong>🔊 Sound</strong>
-                        <small>Game sound effects</small>
-                    </div>
-
-                    <label class="switch">
-                        <input type="checkbox" id="soundToggle" checked>
-                        <span></span>
-                    </label>
-                </div>
-
-                <div class="setting-item">
-                    <div>
-                        <strong>📳 Vibration</strong>
-                        <small>Mobile vibration on events</small>
-                    </div>
-
-                    <label class="switch">
-                        <input type="checkbox" id="vibrationToggle" checked>
-                        <span></span>
-                    </label>
-                </div>
+                </label>
 
             </div>
 
-        </section>
 
+            <div class="setting-row">
 
-        <!-- How To Play -->
-        <section id="howToPlayScreen" class="screen">
+                <div>
 
-            <div class="page-header">
-                <button class="back-btn" id="backFromHowToPlay">‹</button>
-                <h2>❓ How to Play</h2>
-            </div>
+                    <strong>
+                        📳 Vibration
+                    </strong>
 
-            <div class="instructions">
+                    <p>
+                        Vibration on mobile
+                    </p>
 
-                <div class="instruction-card">
-                    <span>🍎</span>
-                    <div>
-                        <strong>Collect Food</strong>
-                        <p>Eat the food to increase your score and grow your snake.</p>
-                    </div>
                 </div>
 
-                <div class="instruction-card">
-                    <span>🐍</span>
-                    <div>
-                        <strong>Keep Growing</strong>
-                        <p>The more food you collect, the longer your snake becomes.</p>
-                    </div>
-                </div>
+                <label class="switch">
 
-                <div class="instruction-card">
-                    <span>🧱</span>
-                    <div>
-                        <strong>Avoid Walls</strong>
-                        <p>Don't let the snake hit the edge of the game area.</p>
-                    </div>
-                </div>
+                    <input
+                        type="checkbox"
+                        id="vibrationToggle"
+                        checked
+                    >
 
-                <div class="instruction-card">
-                    <span>💥</span>
-                    <div>
-                        <strong>Avoid Yourself</strong>
-                        <p>Don't crash into your own snake body.</p>
-                    </div>
-                </div>
+                    <span class="slider"></span>
 
-                <div class="instruction-card">
-                    <span>📱</span>
-                    <div>
-                        <strong>Mobile Controls</strong>
-                        <p>Swipe anywhere on the game screen to change direction.</p>
-                    </div>
-                </div>
-
-                <div class="instruction-card">
-                    <span>⌨️</span>
-                    <div>
-                        <strong>PC Controls</strong>
-                        <p>Use the Arrow Keys to control your snake.</p>
-                    </div>
-                </div>
+                </label>
 
             </div>
 
-        </section>
+        </div>
 
-    </main>
+    </section>
 
-    <script src="script.js"></script>
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="footer">
+
+        <div class="footer-line"></div>
+
+
+        <img
+            src="snakerush-logo.png"
+            class="footer-logo"
+            alt="SnakeRush Logo"
+        >
+
+
+        <h2>
+            SnakeRush
+        </h2>
+
+
+        <p class="footer-tagline">
+            Eat. Grow. Rush. Survive.
+        </p>
+
+
+        <p class="made-by">
+            SnakeRush is made by Ayush Chatterjee
+        </p>
+
+
+        <p class="founder">
+            Founder: SnakeRush.com
+        </p>
+
+
+        <p class="copyright">
+            © 2026 SnakeRush. All rights reserved.
+        </p>
+
+    </footer>
+
+</div>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
-```
-
