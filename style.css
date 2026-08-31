@@ -55,9 +55,7 @@ button:focus {
 }
 
 
-/* =================================
-   HERO
-================================= */
+/* HERO */
 
 .hero {
     text-align: center;
@@ -110,9 +108,7 @@ button:focus {
 }
 
 
-/* =================================
-   WELCOME
-================================= */
+/* WELCOME */
 
 .welcome-card {
     display: flex;
@@ -165,9 +161,7 @@ button:focus {
 }
 
 
-/* =================================
-   QUICK STATS
-================================= */
+/* QUICK STATS */
 
 .quick-stats {
     display: grid;
@@ -220,9 +214,7 @@ button:focus {
 }
 
 
-/* =================================
-   MENU
-================================= */
+/* MENU */
 
 .menu {
     display: flex;
@@ -275,9 +267,7 @@ button:focus {
 }
 
 
-/* =================================
-   FOOTER
-================================= */
+/* FOOTER */
 
 .footer {
     text-align: center;
@@ -342,9 +332,7 @@ button:focus {
 }
 
 
-/* =================================
-   GAME HEADER
-================================= */
+/* GAME HEADER */
 
 .game-header {
     display: grid;
@@ -403,9 +391,7 @@ button:focus {
 }
 
 
-/* =================================
-   SCORE
-================================= */
+/* SCORE */
 
 .score-row {
     display: grid;
@@ -455,9 +441,7 @@ button:focus {
 }
 
 
-/* =================================
-   SPEED INDICATOR
-================================= */
+/* SPEED INDICATOR */
 
 .speed-indicator {
     display: flex;
@@ -482,9 +466,7 @@ button:focus {
 }
 
 
-/* =================================
-   GAME AREA
-================================= */
+/* GAME AREA */
 
 .game-area {
     position: relative;
@@ -522,9 +504,7 @@ button:focus {
 }
 
 
-/* =================================
-   GAME OVERLAY
-================================= */
+/* GAME OVERLAY */
 
 .game-overlay {
     position: absolute;
@@ -599,9 +579,7 @@ button:focus {
 }
 
 
-/* =================================
-   CONTROLS
-================================= */
+/* CONTROLS */
 
 .control-hint {
     display: grid;
@@ -639,9 +617,7 @@ button:focus {
 }
 
 
-/* =================================
-   PAGE HEADER
-================================= */
+/* PAGE HEADER */
 
 .page-header {
     display: flex;
@@ -677,9 +653,7 @@ button:focus {
 }
 
 
-/* =================================
-   STATISTICS
-================================= */
+/* STATISTICS */
 
 .statistics-grid {
     display: grid;
@@ -735,9 +709,7 @@ button:focus {
 }
 
 
-/* =================================
-   INSTRUCTIONS
-================================= */
+/* INSTRUCTIONS */
 
 .instructions {
     display: flex;
@@ -799,9 +771,7 @@ button:focus {
 }
 
 
-/* =================================
-   SETTINGS
-================================= */
+/* SETTINGS */
 
 .settings-box {
     overflow: hidden;
@@ -836,9 +806,7 @@ button:focus {
 }
 
 
-/* =================================
-   SPEED OPTIONS
-================================= */
+/* SPEED OPTIONS */
 
 .speed-options {
     display: grid;
@@ -905,9 +873,7 @@ button:focus {
 }
 
 
-/* =================================
-   SETTING ROW
-================================= */
+/* SETTING ROW */
 
 .setting-row {
     display: flex;
@@ -924,10 +890,6 @@ button:focus {
         rgba(255, 255, 255, .07);
 }
 
-.setting-row:last-child {
-    border-bottom: none;
-}
-
 .setting-row h3 {
     font-size: 11px;
 }
@@ -942,8 +904,84 @@ button:focus {
 
 
 /* =================================
-   SWITCH
+   GAME DETAILS BUTTON
 ================================= */
+
+.settings-details-button {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 14px 16px;
+
+    background: transparent;
+
+    color: #e2eaee;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background .15s;
+}
+
+.settings-details-button:active {
+    background:
+        rgba(34, 197, 94, .07);
+}
+
+.details-button-icon {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        rgba(34, 197, 94, .10);
+
+    font-size: 19px;
+}
+
+.details-button-text {
+    flex: 1;
+}
+
+.details-button-text strong {
+    display: block;
+
+    font-size: 11px;
+}
+
+.details-button-text small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #718692;
+
+    font-size: 8px;
+}
+
+.details-arrow {
+    color: #4ade80;
+
+    font-size: 17px;
+}
+
+
+/* SWITCH */
 
 .switch {
     width: 44px;
@@ -1000,9 +1038,14 @@ button:focus {
 }
 
 
-/* =================================
-   SMALL PHONES
-================================= */
+/* SETTINGS FOOTER */
+
+.settings-footer {
+    padding-top: 27px;
+}
+
+
+/* SMALL PHONES */
 
 @media (max-width: 360px) {
 
@@ -1039,9 +1082,7 @@ button:focus {
 }
 
 
-/* =================================
-   LANDSCAPE MOBILE
-================================= */
+/* LANDSCAPE MOBILE */
 
 @media (
     orientation: landscape
